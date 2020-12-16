@@ -13,7 +13,7 @@ func solve1() {
 	lines := ioutils.ReadLines(path)
 	parts := strings.Split(lines[0], ",")
 	startingNumbers := make([]int64, 0)
-	usage := make(map[int64][]int64)
+	usage := make(map[int64]int64)
 	lSpoke := int64(0)
 	for _, part := range parts {
 		n, _ := strconv.ParseInt(part, 10, 64)
@@ -25,19 +25,18 @@ func solve1() {
 		if int(i)-1 < len(startingNumbers) {
 			n = startingNumbers[i-1]
 		} else {
-			if len(usage[lSpoke]) < 2 {
+			if _, ok := usage[lSpoke]; !ok {
 				n = 0
 			} else {
-				n = usage[lSpoke][1] - usage[lSpoke][0]
+				n = i - 1 - usage[lSpoke]
 			}
 		}
-		usage[n] = append(usage[n], i)
-		if len(usage[n]) > 2 {
-			usage[n] = usage[n][1:]
+		if i > 1 {
+			usage[lSpoke] = i - 1
 
 		}
 		lSpoke = n
-
+		//fmt.Println(n)
 	}
 	fmt.Println(n)
 
